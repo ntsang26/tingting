@@ -6,6 +6,7 @@ const userSchema = new mongoose.Schema(
     password: { type: String, required: true, minLength: 6 },
     fullName: { type: String, required: true },
     profilePic: { type: String, default: "" },
+    friends: { type: [mongoose.Schema.Types.ObjectId], ref: "User" },
   },
   {
     timestamps: true,

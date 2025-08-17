@@ -62,7 +62,6 @@ const ChatContainer = () => {
             className={`chat ${
               message.senderId === authUser._id ? "chat-end" : "chat-start"
             }`}
-            ref={messageEndRef}
           >
             <div className=" chat-image avatar">
               <div className="size-10 rounded-full border">
@@ -95,6 +94,7 @@ const ChatContainer = () => {
             </div>
           </div>
         ))}
+        <span ref={messageEndRef}></span>
       </div>
 
       <MessageInput />
