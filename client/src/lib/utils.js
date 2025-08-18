@@ -5,3 +5,8 @@ export function formatMessageTime(date) {
     hour12: false,
   });
 }
+
+export function checkImageSize(file) {
+  const maxSize = 10 * 1024 * 1024; // 10MB
+  return file.size <= maxSize;
+}

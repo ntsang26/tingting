@@ -1,6 +1,8 @@
 import { useRef, useState } from "react";
 import { useAuthStore } from "../store/useAuthStore";
 import { Camera, Mail, NotebookPen, User } from "lucide-react";
+import { checkImageSize } from "../lib/utils";
+import toast from "react-hot-toast";
 
 const ProfilePage = () => {
   const inputRef = useRef(null);
@@ -15,6 +17,11 @@ const ProfilePage = () => {
   const handleImageUpload = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
+
+    if (!checkImageSize(file)) {
+      toast.error("Image size must be less than 10MB");
+      return;
+    }
 
     const reader = new FileReader();
 

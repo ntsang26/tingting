@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 import { useChatStore } from "../store/useChatStore";
 import { Image, Send, X } from "lucide-react";
 import toast from "react-hot-toast";
+import { checkImageSize } from "../lib/utils";
 
 const MessageInput = () => {
   const [text, setText] = useState("");
@@ -14,6 +15,11 @@ const MessageInput = () => {
     const file = e.target.files[0];
     if (!file.type.startsWith("image/")) {
       toast.error("Please select an image file");
+      return;
+    }
+
+    if (!checkImageSize(file)) {
+      toast.error("Image size must be less than 10MB");
       return;
     }
 
