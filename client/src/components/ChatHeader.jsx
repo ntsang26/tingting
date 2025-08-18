@@ -24,7 +24,7 @@ const ChatHeader = () => {
           <div>
             <h3 className="font-medium">
               {selectedUser.fullName}{" "}
-              <span className="text-sm text-base-content/70">
+              <span className="text-sm text-base-content/70 sm:inline block">
                 {selectedUser.note}
               </span>
             </h3>
