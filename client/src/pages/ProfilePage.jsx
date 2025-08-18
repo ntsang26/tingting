@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 import { useAuthStore } from "../store/useAuthStore";
-import { Camera, Mail, User } from "lucide-react";
+import { Camera, Mail, NotebookPen, User } from "lucide-react";
 
 const ProfilePage = () => {
   const inputRef = useRef(null);
@@ -9,6 +9,7 @@ const ProfilePage = () => {
 
   const [formData, setFormData] = useState({
     fullName: authUser?.fullName || "",
+    note: authUser?.note || "",
   });
 
   const handleImageUpload = async (e) => {
@@ -29,7 +30,7 @@ const ProfilePage = () => {
   };
 
   const handleUpdateProfile = async () => {
-    if (authUser.fullName !== formData.fullName) await updateProfile(formData);
+    await updateProfile(formData);
   };
 
   return (
@@ -84,10 +85,29 @@ const ProfilePage = () => {
           <div className="space-y-6">
             <div className="space-y-1.5">
               <div className="text-sm text-zinc-400 flex items-center gap-2">
+                <NotebookPen className="w-4 h-4" />
+                Status
+              </div>
+              <input
+                disabled={isUpdatingProfile}
+                id="status"
+                type="text"
+                className={`w-full px-4 py-2.5 bg-base-200 rounded-lg border`}
+                placeholder="How are you?"
+                value={formData.note}
+                onChange={(e) =>
+                  setFormData({ ...formData, note: e.target.value })
+                }
+              />
+            </div>
+
+            <div className="space-y-1.5">
+              <div className="text-sm text-zinc-400 flex items-center gap-2">
                 <User className="w-4 h-4" />
                 Full Name
               </div>
               <input
+                disabled={isUpdatingProfile}
                 id="fullName"
                 type="text"
                 className={`w-full px-4 py-2.5 bg-base-200 rounded-lg border`}

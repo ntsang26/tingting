@@ -89,14 +89,15 @@ export const logout = (req, res) => {
 
 export const updateProfile = async (req, res) => {
   try {
-    const { profilePic, fullName } = req.body;
+    const { profilePic, fullName, note } = req.body;
     const userId = req.user._id;
     let newProfilePic = req.user.profilePic;
+    let input = {};
 
-    if (!profilePic && !fullName) {
+    if (!profilePic && !fullName && !note) {
       return res
         .status(400)
-        .json({ message: "Profile picture or full name is required" });
+        .json({ message: "Profile picture, full name, or status is required" });
     }
 
     // Upload the new profile picture to Cloudinary
@@ -105,13 +106,20 @@ export const updateProfile = async (req, res) => {
         folder: "tingting/profile_pics",
       });
       newProfilePic = result.secure_url;
+      input.profilePic = newProfilePic;
     }
 
-    const updatedUser = await User.findByIdAndUpdate(
-      userId,
-      { profilePic: newProfilePic, fullName },
-      { new: true }
-    );
+    if (req.user.fullName !== fullName) {
+      input.fullName = fullName;
+    }
+
+    if (req.user.note !== note) {
+      input.note = note;
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(userId, input, {
+      new: true,
+    });
 
     return res.status(200).json(updatedUser);
   } catch (error) {

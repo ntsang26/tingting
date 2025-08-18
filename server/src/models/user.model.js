@@ -7,6 +7,7 @@ const userSchema = new mongoose.Schema(
     fullName: { type: String, required: true },
     profilePic: { type: String, default: "" },
     friends: { type: [mongoose.Schema.Types.ObjectId], ref: "User" },
+    note: { type: String },
   },
   {
     timestamps: true,
