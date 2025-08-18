@@ -5,8 +5,14 @@ import SidebarSkeleton from "./skeletons/SidebarSkeleton";
 import { Users } from "lucide-react";
 
 const Sidebar = () => {
-  const { getUsers, users, selectedUser, setSelectedUser, isUsersLoading } =
-    useChatStore();
+  const {
+    getUsers,
+    users,
+    selectedUser,
+    setSelectedUser,
+    isUsersLoading,
+    messageNotify,
+  } = useChatStore();
 
   const { onlineUsers } = useAuthStore();
   const [showOnlineOnly, setShowOnlineOnly] = useState(false);
@@ -44,10 +50,6 @@ const Sidebar = () => {
         </div>
       </div>
 
-      <div>
-        <input type="text" placeholder="Search..." />
-      </div>
-
       <div className="overflow-y-auto w-full py-3">
         {filteredUsers.map((user) => (
           <button
@@ -75,11 +77,20 @@ const Sidebar = () => {
                   rounded-full ring-2 ring-zinc-900"
                 />
               )}
+
+              {Object.keys(messageNotify).includes(user._id) && (
+                <span className="lg:hidden absolute top-0 right-0 size-3 bg-red-400 rounded-full ring-2 ring-zinc-900" />
+              )}
             </div>
 
             {/* User info - only visible on larger screens */}
             <div className="hidden lg:block text-left min-w-0">
-              <div className="font-medium truncate">{user.fullName}</div>
+              <div className="font-medium truncate flex items-center">
+                {user.fullName}
+                {Object.keys(messageNotify).includes(user._id) && (
+                  <span className="size-2 bg-red-400 rounded-full ring-2 ring-zinc-900 mx-2 hidden lg:block" />
+                )}
+              </div>
               <div className="text-sm text-zinc-400">
                 {onlineUsers.includes(user._id) ? "Online" : "Offline"}
               </div>

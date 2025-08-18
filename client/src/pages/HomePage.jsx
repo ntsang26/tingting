@@ -1,10 +1,28 @@
+import { useEffect } from "react";
 import ChatContainer from "../components/ChatContainer";
 import NoChatSelected from "../components/NoChatSelected";
 import Sidebar from "../components/Sidebar";
 import { useChatStore } from "../store/useChatStore";
+import { useAuthStore } from "../store/useAuthStore";
 
 const HomePage = () => {
-  const { selectedUser } = useChatStore();
+  const { selectedUser, setMessageNotify } = useChatStore();
+  const { socket, authUser } = useAuthStore();
+
+  useEffect(() => {
+    // get notify if have new message
+    socket.on("newMessage", (newMessage) => {
+      if (authUser._id === newMessage.receiverId) {
+        if (selectedUser?._id !== newMessage.senderId) {
+          setMessageNotify(newMessage.senderId);
+        }
+      }
+    });
+
+    return () => {
+      socket.off("newMessage");
+    };
+  }, [socket, selectedUser]);
 
   return (
     <div className="h-screen bg-base-200">

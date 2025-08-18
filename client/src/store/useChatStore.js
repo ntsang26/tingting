@@ -9,6 +9,7 @@ export const useChatStore = create((set, get) => ({
   selectedUser: null,
   isUsersLoading: false,
   isMessagesLoading: false,
+  messageNotify: {},
 
   getUsers: async () => {
     set({ isUsersLoading: true });
@@ -68,5 +69,19 @@ export const useChatStore = create((set, get) => ({
     socket.off("newMessage");
   },
 
-  setSelectedUser: (selectedUser) => set({ selectedUser }),
+  setSelectedUser: (selectedUser) => {
+    const { messageNotify } = get();
+    if (messageNotify[selectedUser._id]) delete messageNotify[selectedUser._id];
+    set({ selectedUser });
+  },
+
+  setMessageNotify: (userId) => {
+    const { messageNotify } = get();
+    set({
+      messageNotify: {
+        ...messageNotify,
+        [userId]: true,
+      },
+    });
+  },
 }));
